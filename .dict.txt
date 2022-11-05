@@ -1,3 +1,6 @@
+argerror
+argerrorf
+errorf
 debugx
 stringx
 tablex
