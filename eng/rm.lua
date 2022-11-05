@@ -1,7 +1,7 @@
 local IS_WINDOWS = package.config:sub(1, 1) == '\\'
 
 local function run(path)
-  local cmd = IS_WINDOWS and 'cmd /c del /s /q %s' or 'rm -rf %s'
+  local cmd = IS_WINDOWS and 'cmd /c del /q %s' or 'rm -f %s'
   if IS_WINDOWS then
     path = path:gsub('/', '\\')
   end
