@@ -14,7 +14,14 @@ dependencies = {
   'lua >= 5.4',
 }
 build = {
-  modules = {}
+  modules = {
+    ['std.array'] = 'src/std/array.lua',
+    ['std.debugx'] = 'src/std/debugx.lua',
+    ['std.func'] = 'src/std/func.lua',
+    ['std.predicates'] = 'src/std/predicates.lua',
+    ['std.stringx'] = 'src/std/stringx.lua',
+    ['std.tablex'] = 'src/std/tablex.lua',
+  }
 }
 test = {
   type = 'busted'
