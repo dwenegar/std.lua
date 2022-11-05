@@ -5,7 +5,7 @@ format = $(LUA) scripts/format.lua
 tidy = $(LUA) scripts/tidy.lua
 rm =  $(LUA) scripts/rm.lua
 
-rock_name = @ROCK_NAME@
+rock_name = std.lua
 rock_version = $(shell $(ver))
 rockspec = rockspecs/$(rock_name)-$(rock_version)-1.rockspec
 rockspec_dev = rockspecs/$(rock_name)-dev-1.rockspec

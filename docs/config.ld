@@ -1,5 +1,5 @@
-project = '@ROCK_NAME@'
-description = '@ROCK_SUMMARY@'
+project = 'std.lua'
+description = 'A Lua standard library'
 dir = '../site'
 file = {
   '../src',
