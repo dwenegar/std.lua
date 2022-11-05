@@ -1,0 +1,20 @@
+{
+  "files.associations": {
+    ".busted": "lua",
+    ".luacheckrc": "lua",
+    ".luacov": "lua",
+    "*.ld": "lua",
+    "*.ltp": "html",
+    "*.rockspec": "lua"
+  },
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/*.def": true,
+    "**/*.o": true,
+    "**/*.obj": true,
+    "**/CVS": true
+  }
+}

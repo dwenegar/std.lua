@@ -1,0 +1,23 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "dictionaryDefinitions": [
+    {
+      "name": "project-dict",
+      "description": "Project specific dictionary for cspell",
+      "path": "../.dict.txt"
+    },
+    {
+      "name": "lua-dict",
+      "description": "Lua dictionary for cspell",
+      "path": "../.dictlua.txt"
+    }
+  ],
+  "dictionaries": [
+    "project-dict",
+    "lua-dict"
+  ],
+  "ignorePaths": [
+    ".lua-format"
+  ]
+}

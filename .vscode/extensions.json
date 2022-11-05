@@ -1,0 +1,9 @@
+{
+    "recommendations": [
+      "sumneko.lua",
+      "koihik.vscode-lua-format",
+      "dwenegar.vscode-luacheck",
+      "streetsidesoftware.code-spell-checker",
+      "DavidAnson.vscode-markdownlint"
+    ]
+}

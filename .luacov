@@ -1,0 +1,7 @@
+include = {
+  'src/.+$'
+}
+reporter = 'summary'
+summary = {
+  use_color = true
+}

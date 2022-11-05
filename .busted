@@ -1,0 +1,10 @@
+local is_windows = not not package.config:find('\\')
+return {
+  test = {
+    lpath = './src/?.lua;./src/?/init.lua;././?.lua;./?/init.lua;',
+    cpath = is_windows and './?.dll;./?/?.dll' or './?.so;./?/?.so',
+  },
+  default = {
+    cpath = is_windows and './?.dll;./?/?.dll' or './?.so;./?/?.so',
+  }
+}

@@ -1,0 +1,29 @@
+name: 'Lint'
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - 'src/**'
+      - 'spec/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Lua
+        uses: dwenegar/setup-lua@master
+        with:
+          lua-version: '5.4'
+          luarocks-version: latest
+      - name: Lua
+        run: |
+          luarocks install luacov
+          luarocks install lanes
+          luarocks install luacheck
+          luacheck --quiet --formatter plain src spec
+

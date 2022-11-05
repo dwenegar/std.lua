@@ -1,0 +1,56 @@
+[changelog]
+trim = true
+header = """
+# Changelog
+
+"""
+body = """
+{% if version %}\
+    ## [{{ version | trim_start_matches(pat="v") }}] - {{ timestamp | date(format="%Y-%m-%d") }}
+{% else %}\
+    ## [unreleased]
+{% endif %}\
+{% if previous %}\
+    {% if previous.commit_id %}
+        [{{ previous.commit_id | truncate(length=7, end="") }}]({{ previous.commit_id }})...\
+            [{{ commit_id | truncate(length=7, end="") }}]({{ commit_id }})
+    {% endif %}\
+{% endif %}\
+{% for group, commits in commits | group_by(attribute="group") %}
+    ### {{ group | upper_first }}
+    {% for commit in commits %}
+        - {{ commit.message | upper_first }} ([{{ commit.id | truncate(length=7, end="") }}]({{ commit.id }}))\
+          {% for footer in commit.footers -%}
+            , {{ footer.token }}{{ footer.separator }}{{ footer.value }}\
+          {% endfor %}\
+    {% endfor %}
+{% endfor %}\n
+"""
+
+[git]
+commit_parsers = [
+  { message = "\\[skip ci\\]", skip = true },
+  { message = "empty commit", skip = true },
+
+  # https://www.conventionalcommits.org/en/v1.0.0/#summary
+  { message = "^[^ ]+!:", group = ":boom: Breaking" },
+  { message = "^feat:", group = ":sparkles: Features" },
+  { message = "^perf:", group = ":zap: Performance" },
+  { message = "^fix:", group = ":bug: Bug Fixes" },
+  { message = "^docs?:", group = ":books: Documentation" },
+  { message = "^refactor:", group = ":recycle: Refactor" },
+  { message = "^tests?:", group = ":vertical_traffic_light: Testing" },
+  { message = "^chore:", skip = true },
+
+  # Non-conventional
+  { message = "^(ci|build):", skip = true },
+  { message = "^style:", skip = true },
+  { message = "^typos?:", skip = true },
+  { message = "^examples?:", group = ":technologist: Examples" },
+  { message = "^deps?:", group = ":package: Dependencies" },
+  { message = "^loc(calization)?", group = ":globe_with_meridians: Localization" },
+  { message = "^access(ibility)?", group = ":wheelchair: Accessibility" },
+
+  # All other commits
+  { message = ".*", group = ":toolbox: Other" },
+]

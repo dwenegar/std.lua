@@ -1,0 +1,21 @@
+-- cspell: disable
+-- luacheck: no max line length
+rockspec_format = '3.0'
+package = '@ROCK_NAME@'
+version = 'dev-1'
+description = {
+  summary = '@ROCK_SUMMARY@',
+  license = 'BSD-2'
+}
+source = {
+  url = 'git://github.com/@GH_USER@/@GH_REPO@.git',
+}
+dependencies = {
+  'lua >= 5.4',
+}
+build = {
+  modules = {}
+}
+test = {
+  type = 'busted'
+}
