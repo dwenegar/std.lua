@@ -1,9 +1,9 @@
 LUA ?= lua
 
-ver = $(LUA) scripts/ver.lua
-format = $(LUA) scripts/format.lua
-tidy = $(LUA) scripts/tidy.lua
-rm =  $(LUA) scripts/rm.lua
+ver = $(LUA) eng/ver.lua
+format = $(LUA) eng/format.lua
+tidy = $(LUA) eng/tidy.lua
+rm =  $(LUA) eng/rm.lua
 
 rock_name = std.lua
 rock_version = $(shell $(ver))
