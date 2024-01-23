@@ -1,0 +1,108 @@
+describe("#shapes", function()
+  local shapes = require 'std.shapes'
+  describe("#any", function()
+    it("should accept anything", function()
+      assert.is_nil(shapes.any(1))
+      assert.is_nil(shapes.any("string"))
+      assert.is_nil(shapes.any({}))
+      assert.is_nil(shapes.any(function()
+      end))
+      assert.is_nil(shapes.any(true))
+      assert.is_nil(shapes.any(io.stdout))
+      assert.is_nil(shapes.any(nil))
+    end)
+  end)
+  describe("#number", function()
+    it("should accept any number", function()
+      assert.is_nil(shapes.number(1))
+      assert.is_nil(shapes.number(1.0))
+    end)
+    it("should reject anything not a number", function()
+      assert.are_equal("expected number, got string", shapes.number("1"))
+      assert.are_equal("expected number, got boolean", shapes.number(true))
+      assert.are_equal("expected number, got table", shapes.number({}))
+    end)
+  end)
+  describe("#integer", function()
+    it("should accept any integer", function()
+      assert.is_nil(shapes.integer(1))
+      assert.is_nil(shapes.integer(2020))
+      assert.is_nil(shapes.int(1))
+    end)
+    it("should reject anything not an integer", function()
+      assert.are_equal("expected integer, got string", shapes.integer("1"))
+      assert.are_equal("expected integer, got float", shapes.integer(1.0))
+      assert.are_equal("expected integer, got table", shapes.integer({}))
+    end)
+  end)
+  describe("#float", function()
+    it("should accept any float", function()
+      assert.is_nil(shapes.float(1.0))
+      assert.is_nil(shapes.float(2 + 1.0))
+    end)
+    it("should reject anything not an float", function()
+      assert.are_equal("expected float, got string", shapes.float("1"))
+      assert.are_equal("expected float, got integer", shapes.float(1))
+      assert.are_equal("expected float, got table", shapes.float({}))
+    end)
+  end)
+  describe("string", function()
+    it("should accept any string", function()
+      assert.is_nil(shapes.string("1"))
+      assert.is_nil(shapes.string("1" .. "2"))
+    end)
+    it("should reject anything not an string", function()
+      assert.are_equal("expected string, got number", shapes.string(1))
+      assert.are_equal("expected string, got table", shapes.string({}))
+    end)
+  end)
+  describe("array_of", function()
+    local int_array = shapes.array_of(shapes.int)
+    local string_array = shapes.array_of(shapes.string)
+    it("should accept any array of a valid values", function()
+      assert.is_nil(int_array({1, 2, 3}))
+      assert.is_nil(string_array({"1", "2", "3"}))
+    end)
+    it("should accept any array with invalid values", function()
+      assert.same({type = "field_error", key = 2, error = "expected integer, got string"}, int_array({1, "2", 3}))
+      assert.same({type = "field_error", key = 1, error = "expected string, got boolean"}, string_array({true}))
+    end)
+    it("should accept any array of a valid values and of the right length", function()
+      local test = shapes.array_of(shapes.int, {length = 2})
+      assert.is_nil(test({1, 2}))
+    end)
+    it("should reject any array of a valid values and with a wrong length", function()
+      local test = shapes.array_of(shapes.int, {length = 2})
+      assert.are_equal("expected array length equal to 2, got 3", test({1, 2, 3}))
+    end)
+  end)
+  describe("#shape", function()
+    it("should reject any array with invalid values", function()
+      local test = shapes.shape({s = shapes.array_of(shapes.string, {check_all = true})}, {exact = true})
+      local t = {a = true, s = {"1", true, "a", 1}}
+      local expected = {
+        type = 'aggregate_error',
+        errors = {
+          "unexpected key 'a'",
+          {
+            type = 'field_error',
+            key = 's',
+            error = {
+              type = 'aggregate_error',
+              errors = {
+                {type = 'field_error', key = 2, error = "expected string, got boolean"},
+                {type = 'field_error', key = 4, error = "expected string, got number"}
+              }
+            }
+          }
+        }
+      }
+      assert.same(expected, test(t))
+    end)
+    it("should accept any array of a valid values", function()
+      local test = shapes.shape({s = shapes.array_of(shapes.string), t = shapes.int}, {exact = true})
+      local t = {s = {"1", "a"}}
+      assert.is_nil(test(t))
+    end)
+  end)
+end)
