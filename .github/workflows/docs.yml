@@ -1,4 +1,4 @@
-name: Docs
+name: 'Docs'
 
 on:
   workflow_dispatch:
@@ -16,14 +16,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-docs:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Setup Lua
         uses: dwenegar/setup-lua@master
         with:
@@ -34,11 +31,18 @@ jobs:
           luarocks install ldoc
           ldoc -c build-aux/config.ld .
       - name: Setup Pages
-        uses: actions/configure-pages@v1
+        uses: actions/configure-pages@v4
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: 'site'
+          path: './site'
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@main
+        uses: actions/deploy-pages@v4
