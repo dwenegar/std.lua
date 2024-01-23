@@ -3,7 +3,6 @@ LUA ?= lua
 ver = $(LUA) eng/ver.lua
 format = $(LUA) eng/format.lua
 tidy = $(LUA) eng/tidy.lua
-rm =  $(LUA) eng/rm.lua
 
 rock_name = std.lua
 rock_version = $(shell $(ver))
@@ -45,7 +44,6 @@ changelog:
 rockspec: $(rockspec_dev)
 	luarocks new_version --dir rockspecs --tag $(rock_version) $(rockspec_dev)
 	$(tidy) $(rockspec)
-	$(rm) $(rock_name)-dev-1.rockspec
 
 pre-checkin: rockspec
 
@@ -80,5 +78,5 @@ help:
 	@echo "  major-version        increments the major version"
 	@echo "  minor-version        increments the minor version"
 	@echo "  patch-version        increments the patch version"
-	@echo "  tag                  adds a release tag"
+	@echo "  tag                  adds the release tag"
 	@echo "  untag                removes the release tag"
