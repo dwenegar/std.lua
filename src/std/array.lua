@@ -2,6 +2,8 @@
 -- @module std.array
 local M = {}
 
+local stringx = require 'std.stringx'
+
 local ipairs = ipairs
 local pairs = pairs
 local rawequal = rawequal
@@ -400,7 +402,7 @@ end
 --- Applies a transform function to each element of an array and return the
 -- the maximum of the projected values.
 -- @tparam table a an array to determine the maximum value of.
--- @tparam[opt] comparer cmp a transform function to apply to each element.
+-- @tparam[opt] transform f a transform function to apply to each element.
 -- @return the maximum projected value in the array, or `nil` if the array is empty.
 function max(a, f)
   if #a == 0 then
@@ -986,17 +988,6 @@ function remove_all_if(a, from, to, p)
   return n
 end
 
-function smart_quotes(s)
-  local has_single = s:find("'", 1, true)
-  local has_double = s:find('"', 1, true)
-  if has_single and has_double then
-    return ('[[%s]]'):format(s)
-  elseif has_single then
-    return ('"%s"'):format(s)
-  end
-  return ("'%s'"):format(s)
-end
-
 --- Returns the string representation of a range of elements of an array.
 -- @tparam table a an array.
 -- @tparam[opt] integer from the starting index of the range.
@@ -1016,7 +1007,7 @@ function to_string(a, from, to)
     end
     local tv = type(v)
     if tv == 'string' then
-      b[#b + 1] = smart_quotes(v)
+      b[#b + 1] = stringx.smart_quotes(v)
     else
       b[#b + 1] = tostring(v)
     end
