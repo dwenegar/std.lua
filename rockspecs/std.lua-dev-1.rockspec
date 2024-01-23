@@ -25,6 +25,7 @@ build = {
   modules = {
     -- C modules
     ['std.checks'] = cmod('checks.c', 'liberror.c'),
+    ['std.hash'] = cmod('hash.c'),
     -- Lua modules
     ['std.array'] = 'src/std/array.lua',
     ['std.debugx'] = 'src/std/debugx.lua',
