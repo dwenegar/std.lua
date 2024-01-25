@@ -45,6 +45,9 @@ build = {
     ['std.shapes'] = 'src/std/shapes.lua',
     ['std.stringx'] = 'src/std/stringx.lua',
     ['std.tablex'] = 'src/std/tablex.lua',
+    ['std.term.colors'] = 'src/std/term/colors.lua',
+    ['std.term.cursor'] = 'src/std/term/cursor.lua',
+    ['std.term.pager'] = 'src/std/term/pager.lua',
   }
 }
 test = {
