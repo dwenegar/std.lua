@@ -29,6 +29,13 @@ build = {
     ['std.time'] = cmod('time.c', 'libtime.c', 'liberror.c', 'libsyserror.c'),
     -- Lua modules
     ['std.array'] = 'src/std/array.lua',
+    ['std.cli'] = 'src/std/cli.lua',
+    ['std.cli.cmd'] = 'src/std/cli/cmd.lua',
+    ['std.cli.flag'] = 'src/std/cli/flag.lua',
+    ['std.cli.help'] = 'src/std/cli/help.lua',
+    ['std.cli.parser'] = 'src/std/cli/parser.lua',
+    ['std.cli.reader'] = 'src/std/cli/reader.lua',
+    ['std.cli.util'] = 'src/std/cli/util.lua',
     ['std.debugx'] = 'src/std/debugx.lua',
     ['std.func'] = 'src/std/func.lua',
     ['std.predicates'] = 'src/std/predicates.lua',
