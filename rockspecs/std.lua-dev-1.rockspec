@@ -38,6 +38,7 @@ build = {
     ['std.cli.util'] = 'src/std/cli/util.lua',
     ['std.debugx'] = 'src/std/debugx.lua',
     ['std.func'] = 'src/std/func.lua',
+    ['std.oo'] = 'src/std/oo.lua',
     ['std.predicates'] = 'src/std/predicates.lua',
     ['std.stringx'] = 'src/std/stringx.lua',
     ['std.tablex'] = 'src/std/tablex.lua',
