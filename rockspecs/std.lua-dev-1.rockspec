@@ -42,6 +42,7 @@ build = {
     ['std.i18n'] = 'src/std/i18n.lua',
     ['std.oo'] = 'src/std/oo.lua',
     ['std.predicates'] = 'src/std/predicates.lua',
+    ['std.shapes'] = 'src/std/shapes.lua',
     ['std.stringx'] = 'src/std/stringx.lua',
     ['std.tablex'] = 'src/std/tablex.lua',
   }
