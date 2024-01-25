@@ -36,6 +36,7 @@ build = {
     ['std.cli.parser'] = 'src/std/cli/parser.lua',
     ['std.cli.reader'] = 'src/std/cli/reader.lua',
     ['std.cli.util'] = 'src/std/cli/util.lua',
+    ['std.convert'] = 'src/std/convert.lua',
     ['std.debugx'] = 'src/std/debugx.lua',
     ['std.func'] = 'src/std/func.lua',
     ['std.oo'] = 'src/std/oo.lua',
