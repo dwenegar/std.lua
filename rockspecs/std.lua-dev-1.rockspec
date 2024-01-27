@@ -26,6 +26,7 @@ build = {
     -- C modules
     ['std.checks'] = cmod('checks.c', 'liberror.c'),
     ['std.hash'] = cmod('hash.c'),
+    ['std.path'] = cmod('path.c', 'libpath.c', 'libutil.c', 'liballocator.c', 'libutf.c', 'liberror.c', 'libsyserror.c'),
     ['std.sleep'] = cmod('sleep.c', 'libsleep.c', 'libtime.c', 'liberror.c', 'libsyserror.c'),
     ['std.time'] = cmod('time.c', 'libtime.c', 'liberror.c', 'libsyserror.c'),
     -- Lua modules
