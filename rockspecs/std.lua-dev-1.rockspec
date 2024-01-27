@@ -1,10 +1,11 @@
+-- LuaFormatter off
 -- cspell: disable
 -- luacheck: no max line length
 rockspec_format = '3.0'
 package = 'std.lua'
 version = 'dev-1'
 description = {
-  summary = 'A Lua standard library',
+  summary = 'Another Lua "standard" library',
   license = 'BSD-2'
 }
 source = {
@@ -47,6 +48,7 @@ build = {
     ['std.i18n'] = 'src/std/i18n.lua',
     ['std.iox'] = 'src/std/iox.lua',
     ['std.oo'] = 'src/std/oo.lua',
+    ['std.os'] = 'src/std/os.lua',
     ['std.predicates'] = 'src/std/predicates.lua',
     ['std.pretty'] = 'src/std/pretty.lua',
     ['std.shapes'] = 'src/std/shapes.lua',
