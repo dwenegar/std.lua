@@ -43,6 +43,7 @@ build = {
     ['std.debugx'] = 'src/std/debugx.lua',
     ['std.func'] = 'src/std/func.lua',
     ['std.i18n'] = 'src/std/i18n.lua',
+    ['std.iox'] = 'src/std/iox.lua',
     ['std.oo'] = 'src/std/oo.lua',
     ['std.predicates'] = 'src/std/predicates.lua',
     ['std.pretty'] = 'src/std/pretty.lua',
