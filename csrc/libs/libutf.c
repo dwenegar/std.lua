@@ -79,9 +79,4 @@ WCHAR *utfL_cat16(lua_State *L, const WCHAR *x, const WCHAR *y, size_t *len)
     return s;
 }
 
-void utfL_free(lua_State *L, const WCHAR *str16)
-{
-    allocatorL_free(L, (void *)str16);
-}
-
 #endif

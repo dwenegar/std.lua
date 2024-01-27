@@ -26,6 +26,7 @@ build = {
     -- C modules
     ['std.checks'] = cmod('checks.c', 'liberror.c'),
     ['std.env'] = cmod('env.c', 'libenv.c', 'liballocator.c', 'libutf.c', 'liberror.c', 'libsyserror.c'),
+    ['std.fs.native'] = cmod('fs.c', 'libfs.c', 'liballocator.c', 'libpath.c', 'libutil.c', 'libstr.c', 'libutf.c', 'liberror.c', 'libsyserror.c'),
     ['std.hash'] = cmod('hash.c'),
     ['std.path'] = cmod('path.c', 'libpath.c', 'libutil.c', 'liballocator.c', 'libutf.c', 'liberror.c', 'libsyserror.c'),
     ['std.sleep'] = cmod('sleep.c', 'libsleep.c', 'libtime.c', 'liberror.c', 'libsyserror.c'),

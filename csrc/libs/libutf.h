@@ -17,3 +17,6 @@ bool utfL_pushlstring16(lua_State *L, const WCHAR *str16, size_t str16len);
 void utfL_free(lua_State *L, const WCHAR *str16);
 
 WCHAR *utfL_cat16(lua_State *L, const WCHAR *x, const WCHAR *y, size_t *len);
+
+#define utfL_free(L, x) allocatorL_free((L), (void *)(x))
+
