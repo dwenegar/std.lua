@@ -55,6 +55,7 @@ build = {
     ['std.term.colors'] = 'src/std/term/colors.lua',
     ['std.term.cursor'] = 'src/std/term/cursor.lua',
     ['std.term.pager'] = 'src/std/term/pager.lua',
+    ['std.text'] = 'src/std/text.lua'
   }
 }
 test = {
