@@ -1,0 +1,28 @@
+describe("#sleep", function()
+  local sleep = require 'std.sleep'
+
+  it("should return immediately (s)", function()
+      local t = os.clock()
+      sleep.sleep(-1)
+      assert.is_true(os.clock() - t < 1e-6)
+  end)
+  it("should return immediately (ms)", function()
+    local t = os.clock()
+    sleep.sleep_ms(-1)
+    assert.is_true(os.clock() - t < 1e-6)
+end)
+it("should sleep for the specified amount of time (s)", function()
+      local t = os.clock()
+      sleep.sleep(0.25)
+      local dt = os.clock() - t
+      assert.is_true(dt >= 0.2)
+      assert.is_true(dt <= 0.3)
+  end)
+  it("should sleep for the specified amount of time (ms)", function()
+    local t = os.clock()
+    sleep.sleep_ms(250)
+    local dt = os.clock() - t
+    assert.is_true(dt >= 0.2)
+    assert.is_true(dt <= 0.3)
+end)
+end)
