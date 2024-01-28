@@ -52,6 +52,7 @@ build = {
     ['std.predicates'] = 'src/std/predicates.lua',
     ['std.pretty'] = 'src/std/pretty.lua',
     ['std.shapes'] = 'src/std/shapes.lua',
+    ['std.stopwatch'] = 'src/std/stopwatch.lua',
     ['std.stringx'] = 'src/std/stringx.lua',
     ['std.tablex'] = 'src/std/tablex.lua',
     ['std.term.colors'] = 'src/std/term/colors.lua',
