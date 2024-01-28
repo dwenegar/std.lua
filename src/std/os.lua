@@ -3,7 +3,7 @@
 
 local M = setmetatable({}, {__index = os})
 
-local iox = require 'std.iox'
+local io = require 'std.io'
 
 local mth_random = math.random
 local os_execute = os.execute
@@ -77,7 +77,7 @@ function execute(cmd)
 
   local r = {}
   if out_tmpfile then
-    local out = iox.read_all(out_tmpfile)
+    local out = io.read_all(out_tmpfile)
     os_remove(out_tmpfile)
     if out then
       out = out:match('^(.-)%s*$')
@@ -86,7 +86,7 @@ function execute(cmd)
   end
 
   if err_tmpfile then
-    local err = iox.read_all(err_tmpfile)
+    local err = io.read_all(err_tmpfile)
     os_remove(err_tmpfile)
     if err then
       err = err:match('^(.-)%s*$')
