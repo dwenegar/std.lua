@@ -1,8 +1,8 @@
 # std.lua
 
-[![Build](https://img.shields.io/github/workflow/status/dwenegar/std.lua/Build?label=Build)](https://github.com/dwenegar/std.lua/actions/workflows/build.yml)
+[![Build](https://img.shields.io/github/actions/workflow/status/dwenegar/std.lua/build.yml?label=Build)](https://github.com/dwenegar/std.lua/actions/workflows/build.yml)
 [![Coverage](https://coveralls.io/repos/github/dwenegar/std.lua/badge.svg?branch=main)](https://coveralls.io/github/dwenegar/std.lua?branch=main)
-[![Docs](https://img.shields.io/github/workflow/status/dwenegar/std.lua/Docs?label=API%20Reference)](https://dwenegar.github.io/std.lua/)
+[![Docs](https://img.shields.io/github/actions/workflow/status/dwenegar/std.lua/docs.yml?label=API%20Reference)](https://dwenegar.github.io/std.lua/)
 [![License](https://img.shields.io/github/license/dwenegar/std.lua?label=License)](LICENSE.txt)
 [![Version](https://img.shields.io/github/v/tag/dwenegar/std.lua?label=Version&logo=semver&sort=semver)](CHANGELOG.md)
 
