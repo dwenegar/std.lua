@@ -4,10 +4,10 @@
 
 #include <dirent.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <sys/stat.h>
 #include <errno.h>
-#include <fcntl.h>
 
 #ifdef _STD_APPLE
 #include <copyfile.h>
@@ -62,7 +62,7 @@ bool fsL_rename(lua_State *L, const char *from, const char *to, bool overwrite)
 #else
 bool fsL_rename(lua_State *L, const char *from, const char *to, bool overwrite)
 {
-    return (overwrite ? rename(from, to) : renameat2(AT_FDCWD, from, AT_FDCWD, to, RENAME_NOREPLACE)) == 0;
+    return (overwrite ? rename(from, to) : renameat(AT_FDCWD, from, AT_FDCWD, to)) == 0;
 }
 #endif
 

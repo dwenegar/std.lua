@@ -1,5 +1,6 @@
-#if defined(_STD_UNIX)
 
+#include "std.h"
+#include "libtime.h"
 #include <time.h>
 #include <sys/time.h>
 
@@ -22,7 +23,7 @@ bool timeL_system_time(lua_Integer *result)
 // Returns the value of the most precise system timer in nanoseconds.
 bool timeL_perf_counter(lua_Integer *result)
 {
-    return timeL_monotonic_time(value);
+    return timeL_monotonic_time(result);
 }
 
 // Returns the number of nanoseconds since an unknown point in time
@@ -52,4 +53,3 @@ bool timeL_process_time(lua_Integer *result)
     *result = ts.tv_sec * NANOS_PER_SECOND + ts.tv_nsec;
     return true;
 }
-#endif

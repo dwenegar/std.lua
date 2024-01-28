@@ -1,6 +1,6 @@
 #include "libsyserror.h"
 #include "liballocator.h"
-#include "libos.h"
+#include "libenv.h"
 
 #include <errno.h>
 #include <limits.h>
@@ -121,16 +121,11 @@ static int system_version(lua_State *L)
 
 static int system_user_home(lua_State *L)
 {
-    const char *value;
-    if (!osL_get_env(L, "HOME", &value))
+    int r = envL_get_var(L, "HOME");
+    if (r == 1) return 1;
+    if (r == -1)
     {
         _STD_RETURN_NIL_ERROR
-    }
-
-    if (value != NULL && *value)
-    {
-        lua_pushstring(L, value);
-        return 1;
     }
 
     uid_t uid = getuid();
@@ -147,27 +142,18 @@ static int system_user_home(lua_State *L)
 
 static int system_user_name(lua_State *L)
 {
-    const char *value;
-    if (!osL_get_env(L, "USER", &value))
+    int r = envL_get_var(L, "USER");
+    if (r == 1) return 1;
+    if (r == -1)
     {
         _STD_RETURN_NIL_ERROR
     }
 
-    if (value != NULL && strlen(value) > 0)
-    {
-        lua_pushstring(L, value);
-        return 1;
-    }
-
-    if (!osL_get_env(L, "LOGNAME", &value))
+    r = envL_get_var(L, "LOGNAME");
+    if (r == 1) return 1;
+    if (r == -1)
     {
         _STD_RETURN_NIL_ERROR
-    }
-
-    if (value != NULL && strlen(value) > 0)
-    {
-        lua_pushstring(L, value);
-        return 1;
     }
 
     uid_t uid = getuid();

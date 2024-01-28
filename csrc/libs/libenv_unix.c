@@ -20,10 +20,12 @@ bool envL_set_current_dir(lua_State *L, const char *path)
     return chdir(path) == 0;
 }
 
-bool envL_get_var(lua_State *L, const char *name)
+int envL_get_var(lua_State *L, const char *name)
 {
-    *value = getenv(name);
-    return errno == 0;
+    const char *value = getenv(name);
+    if (value == NULL) return 0;
+    lua_pushstring(L, value);
+    return 1;
 }
 
 bool envL_set_var(lua_State *L, const char *name, const char *value)
