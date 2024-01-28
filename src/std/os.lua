@@ -1,4 +1,4 @@
---- --- Provides extension functions to the Lua `os` module.
+--- Provides extension functions to the Lua `os` module.
 -- @module std.os
 
 local M = setmetatable({}, {__index = os})

@@ -66,7 +66,7 @@ local BASE64_ALPHABET = {
   '8', '9', '+', '/'
 }
 
---- Convert the given string to base64
+--- Convert the given string to base64.
 -- @tparam string str the string to convert.
 -- @treturn string the input string converted to base64.
 function to_base64(str)

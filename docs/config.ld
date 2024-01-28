@@ -8,9 +8,6 @@ file = {
 topics = {
   '../docs'
 }
-examples = {
-  '../examples'
-}
 format = 'markdown'
 not_luadoc = true
 no_lua_ref = true
@@ -26,3 +23,4 @@ template = '.'
 custom_tags = {
   {'remark', title = 'Remarks'}
 }
+new_type('shape', 'Shapes')
