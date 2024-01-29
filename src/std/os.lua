@@ -37,7 +37,7 @@ end
 -- @tparam CommandContext cmd the command to execute
 -- @treturn boolean `true` if the function succeeded, otherwise `false`.
 -- @treturn CommandOutput the command output if the function succeeded, otherwise `nil`.
-function execute(cmd)
+function exec(cmd)
   local tmp_dir = os_getenv('TMP') or os_getenv('TEMP') or '.'
   local out_tmpfile, err_tmpfile
 
