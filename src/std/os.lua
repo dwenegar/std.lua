@@ -12,9 +12,9 @@ local os_remove = os.remove
 local str_char = string.char
 local tbl_concat = table.concat
 
-local _ENV = M
-
 local IS_WINDOWS = package.config:sub(1, 1) == '\\'
+
+local _ENV = M
 
 function is_windows()
   return IS_WINDOWS
