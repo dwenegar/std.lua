@@ -1,6 +1,11 @@
 argerror
 argerrorf
-errorf
 debugx
+desaturate
+errorf
+inflector
 stringx
 tablex
+uncountables
+undefinite
+dasherize

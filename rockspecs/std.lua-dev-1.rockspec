@@ -46,6 +46,7 @@ build = {
     ['std.debugx'] = 'src/std/debugx.lua',
     ['std.func'] = 'src/std/func.lua',
     ['std.i18n'] = 'src/std/i18n.lua',
+    ['std.inflector'] = 'src/std/inflector.lua',
     ['std.io'] = 'src/std/io.lua',
     ['std.oo'] = 'src/std/oo.lua',
     ['std.os'] = 'src/std/os.lua',
