@@ -4,6 +4,7 @@
 local M = setmetatable({}, {__index = os})
 
 local io = require 'std.io'
+local path = require 'std.path'
 
 local mth_random = math.random
 local os_execute = os.execute
@@ -36,28 +37,25 @@ end
 --- Executes a given command
 -- @tparam CommandContext cmd the command to execute
 -- @treturn boolean `true` if the function succeeded, otherwise `false`.
--- @treturn CommandOutput the command output if the function succeeded, otherwise `nil`.
+-- @treturn string the output of the command if the function succeeded, otherwise `nil`.
+-- @treturn string the error output of the command if the function succeeded, otherwise `nil`.
 function exec(cmd)
   local tmp_dir = os_getenv('TMP') or os_getenv('TEMP') or '.'
   local out_tmpfile, err_tmpfile
 
-  if cmd.stdout then
-    out_tmpfile = random_name(tmp_dir .. '/out-XXXXXXXX.txt')
+  if cmd.stdout == nil or cmd.stdout then
+    out_tmpfile = path.random_file_name(tmp_dir .. '/out-XXXXXXXX.txt')
   end
-  if cmd.stderr then
-    err_tmpfile = random_name(tmp_dir .. '/err-XXXXXXXX.txt')
-  end
-
-  if IS_WINDOWS then
-    cmd = cmd:gsub('/', '\\')
+  if cmd.stderr == nil or cmd.stderr then
+    err_tmpfile = path.random_file_name(tmp_dir .. '/err-XXXXXXXX.txt')
   end
 
   local cmd_line = { cmd.name }
   if cmd.args then
     cmd_line[#cmd_line + 1] = cmd.args
-  elseif cmd.arglist then
-    for i = 1, #cmd.arglist do
-      cmd_line[#cmd_line + 1] = cmd.arglist[i]
+  elseif cmd.arg_list then
+    for i = 1, #cmd.arg_list do
+      cmd_line[#cmd_line + 1] = cmd.arg_list[i]
     end
   end
   if out_tmpfile then
@@ -65,7 +63,7 @@ function exec(cmd)
   end
 
   if err_tmpfile then
-    cmd_line[#cmd_line + 1] = '>' .. err_tmpfile
+    cmd_line[#cmd_line + 1] = '2>' .. err_tmpfile
   end
 
   cmd_line = tbl_concat(cmd_line, ' ')
@@ -75,29 +73,26 @@ function exec(cmd)
     return false
   end
 
-  local r = {}
-  if out_tmpfile then
-    local out = io.read_all(out_tmpfile)
-    os_remove(out_tmpfile)
-    if out then
-      out = out:match('^(.-)%s*$')
+  local function read_output(path)
+    if not path then
+      return nil
     end
-    r.stdout = out
+
+    local r = io.read_all(path)
+    os_remove(path)
+    if r then
+      r = r:match('^(.-)%s*$')
+    end
+    if r and #r == 0 then
+      return nil
+    end
+    return r
   end
 
-  if err_tmpfile then
-    local err = io.read_all(err_tmpfile)
-    os_remove(err_tmpfile)
-    if err then
-      err = err:match('^(.-)%s*$')
-      if #err == 0 then
-        err = nil
-      end
-    end
-    r.stderr = err
-  end
+  local out = read_output(out_tmpfile)
+  local err = read_output(err_tmpfile)
 
-  return true, r
+  return true, out, err
 end
 
 return M
@@ -106,13 +101,7 @@ return M
 -- Contains the customization options for a CLI application.
 -- @table CommandContext
 -- @tfield string name the command to execute.
--- @tfield[opt] table arglist a list of command-line arguments.
+-- @tfield[opt] table arg_list a list of command-line arguments.
 -- @tfield[opt] string args a string containing the command-line arguments.
--- @tfield[opt] boolean stdout if `true` the command's output will be captured.
--- @tfield[opt] boolean stderr if `true` the command's error outut will be captured.
-
---- The command output.
--- Contains the output of the command execution
--- @table CommandOutput
--- @tfield string stdout the capture command's output.
--- @tfield string stderr the capture command's error output.
+-- @tfield[opt] boolean stdout if `true` the command's output will be captured (default: `true`).
+-- @tfield[opt] boolean stderr if `true` the command's error output will be captured (default: `true`).
