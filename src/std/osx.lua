@@ -1,38 +1,17 @@
 --- Provides extension functions to the Lua `os` module.
--- @module std.os
+-- @module std.osx
 
 local M = setmetatable({}, {__index = os})
 
-local io = require 'std.io'
+local io = require 'std.iox'
 local path = require 'std.path'
 
-local mth_random = math.random
 local os_execute = os.execute
 local os_getenv = os.getenv
 local os_remove = os.remove
-local str_char = string.char
 local tbl_concat = table.concat
 
-local IS_WINDOWS = package.config:sub(1, 1) == '\\'
-
 local _ENV = M
-
-function is_windows()
-  return IS_WINDOWS
-end
-
-local function random_name(template)
-  template = template or 'tmpXXXXXXXX'
-  return (template:gsub('X', function()
-    local rnd = mth_random(0, 61)
-    if rnd < 10 then
-      return str_char(rnd + 48)
-    elseif rnd < 36 then
-      return str_char(rnd + 55)
-    end
-    return str_char(rnd + 61)
-  end))
-end
 
 --- Executes a given command
 -- @tparam CommandContext cmd the command to execute
@@ -73,13 +52,13 @@ function exec(cmd)
     return false
   end
 
-  local function read_output(path)
-    if not path then
+  local function read_file(file_path)
+    if not file_path then
       return nil
     end
 
-    local r = io.read_all(path)
-    os_remove(path)
+    local r = io.read_all(file_path)
+    os_remove(file_path)
     if r then
       r = r:match('^(.-)%s*$')
     end
@@ -89,9 +68,8 @@ function exec(cmd)
     return r
   end
 
-  local out = read_output(out_tmpfile)
-  local err = read_output(err_tmpfile)
-
+  local out = read_file(out_tmpfile)
+  local err = read_file(err_tmpfile)
   return true, out, err
 end
 

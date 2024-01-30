@@ -1,5 +1,5 @@
 --- Provides extension functions to the Lua `io` module.
--- @module std.io
+-- @module std.iox
 
 local M = setmetatable({}, {__index = io})
 
