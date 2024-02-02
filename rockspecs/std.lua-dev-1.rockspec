@@ -44,6 +44,7 @@ build = {
     ['std.cli.util'] = 'src/std/cli/util.lua',
     ['std.convert'] = 'src/std/convert.lua',
     ['std.debugx'] = 'src/std/debugx.lua',
+    ['std.fs'] = 'src/std/fs.lua',
     ['std.func'] = 'src/std/func.lua',
     ['std.i18n'] = 'src/std/i18n.lua',
     ['std.inflector'] = 'src/std/inflector.lua',
@@ -59,7 +60,8 @@ build = {
     ['std.term.colors'] = 'src/std/term/colors.lua',
     ['std.term.cursor'] = 'src/std/term/cursor.lua',
     ['std.term.pager'] = 'src/std/term/pager.lua',
-    ['std.text'] = 'src/std/text.lua'
+    ['std.text'] = 'src/std/text.lua',
+    ['std.version'] = 'src/std/version.lua'
   }
 }
 test = {
