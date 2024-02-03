@@ -14,8 +14,17 @@ local builtin_readers = {}
 local custom_readers = {}
 local cached_readers = {}
 
-local function add_reader(t, type_names, requires_arg, read)
-  local reader = {read = read, requires_arg = requires_arg, type = 'single'}
+local function make_default_value_error(expected, x)
+  return ("invalid default value (expected %s, got %s)"):format(expected, type(x))
+end
+
+local function add_reader(t, type_names, requires_arg, read, check)
+  local reader = { --
+    read = read,
+    check = check,
+    requires_arg = requires_arg,
+    type = 'single'
+  }
   for _, type_name in ipairs(type_names) do
     t[type_name] = reader
   end
@@ -31,6 +40,8 @@ add_reader(builtin_readers, {'string', 's'}, true, function(s)
     unquoted = s
   end
   return stringx.unescape(unquoted)
+end, function(_)
+  return true
 end)
 
 add_reader(builtin_readers, {'char', 'c'}, true, function(s)
@@ -38,33 +49,72 @@ add_reader(builtin_readers, {'char', 'c'}, true, function(s)
     return s
   end
   return nil, ("invalid char: '%s'"):format(s)
+end, function(x)
+  if type(x) ~= 'string' then
+    return make_default_value_error('string', x)
+  end
+  if #x ~= 1 then
+    return "invalid default value (string length must be 1)"
+  end
 end)
 
-add_reader(builtin_readers, {'number', 'n','float', 'f'}, true, function(s)
+add_reader(builtin_readers, {'number', 'n', 'float', 'f'}, true, function(s)
   local v = tonumber(s)
-  if v then
+  if v ~= nil then
     return v
   end
   return nil, ("invalid number: '%s'"):format(s)
+end, function(x)
+  if type(x) ~= 'number' then
+    return make_default_value_error('number', x)
+  end
 end)
 
 add_reader(builtin_readers, {'integer', 'int', 'i'}, true, function(s)
   local v = tonumber(s)
-  if v and math_type(v) == 'integer' then
+  if v ~= nil and math_type(v) == 'integer' then
     return v
   end
   return nil, ("invalid integer: '%s'"):format(s)
+end, function(x)
+  local v = tonumber(x)
+  if v == nil or math_type(v) ~= 'integer' then
+    return make_default_value_error('integer', x)
+  end
 end)
 
 add_reader(builtin_readers, {'flag', 'F'}, false, function()
   return true
+end, function(_)
+  -- do nothing
 end)
 
+local TrueValues = {'1', 'true', 'True', 'TRUE', 'yes', 'Yes', 'YES'}
+local FalseValues = {'0', 'false', 'False', 'FALSE', 'no', 'No', 'NO'}
+
+local function to_boolean(s)
+  for i = 1, #TrueValues do
+    if s == TrueValues[i] then
+      return true
+    end
+  end
+  for i = 1, #FalseValues do
+    if s == FalseValues[i] then
+      return false
+    end
+  end
+end
+
 add_reader(builtin_readers, {'boolean', 'bool', 'b'}, true, function(s)
-  local v = s:lower()
-  if v == '1' or v == 't' or v == 'true' or v == 'yes' then return true end
-  if v == '0' or v == 'f' or v == 'false' or v == 'no' then return false end
+  local b = to_boolean(s)
+  if b ~= nil then
+    return b
+  end
   return nil, ("invalid boolean: '%s'"):format(s)
+end, function(x)
+  if type(x) ~= 'boolean' then
+    return make_default_value_error('boolean', x)
+  end
 end)
 
 local function get_reader(type_name)
@@ -218,7 +268,11 @@ function create(type_name)
     end
 
     if read then
-      reader = {read = read, requires_arg = true, type = reader_type}
+      reader = { --
+        read = read,
+        requires_arg = true,
+        type = reader_type
+      }
     end
   end
 

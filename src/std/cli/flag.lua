@@ -101,6 +101,12 @@ function option(opts)
   o.kind = 'option'
   o.type = o.type or 'flag'
   o.reader = reader.create(o.type)
+  if o.default ~= nil then
+    err = o.reader.check(o.default)
+    if err then
+      checks.arg_error(1, tostring(err))
+    end
+  end
   setup_occurrences(o)
   return o
 end
@@ -135,6 +141,12 @@ function argument(opts)
   a.kind = 'argument'
   a.type = a.type or 'string'
   a.reader = reader.create(a.type)
+  if a.default ~= nil then
+    err = a.reader.check(a.default)
+    if err then
+      checks.arg_error(1, tostring(err))
+    end
+  end
   setup_occurrences(a)
   return a
 end

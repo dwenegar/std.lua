@@ -90,10 +90,14 @@ local function find_command(name, commands)
   end)
 end
 
-local function apply(flag, arg, ctx)
-  local value, err = flag.reader.read(arg)
-  if err then
-    return err
+local function apply(flag, arg, ctx, default_value)
+
+  local value, err = default_value
+  if value == nil then
+    value, err = flag.reader.read(arg)
+    if err then
+      return err
+    end
   end
 
   if flag.validate then
@@ -201,7 +205,7 @@ function parse(cmd, args)
           return nil, ("missing argument for option '%s'"):format(name)
         end
       end
-      return arg, apply(option, value, ctx)
+      return arg, apply(option, value, ctx, option.default)
     end
 
     local function handle_argument(arg)
@@ -210,7 +214,7 @@ function parse(cmd, args)
       if argument.max_count and occurrences[argument] == argument.max_count then
         table_remove(local_arguments, 1)
       end
-      return apply(argument, arg, ctx)
+      return apply(argument, arg, ctx, argument.default)
     end
 
     local arguments = {}
@@ -281,20 +285,28 @@ function parse(cmd, args)
     for _, o in ipairs(local_options) do
       local count = occurrences[o] or 0
       if o.min_count and o.min_count > count then
-        if count > 1 then
-          return c, nil, ("option '%s' must appear at least %d times"):format(o.long, count)
+        if o.default ~= nil then
+          apply(o, nil, ctx, o.default)
+        else
+          if count > 1 then
+            return c, nil, ("option '%s' must appear at least %d times"):format(o.long, count)
+          end
+          return c, nil, ("missing required option '%s'"):format(o.long)
         end
-        return c, nil, ("missing required option '%s'"):format(o.long)
       end
     end
 
     for _, a in ipairs(local_arguments) do
       local count = occurrences[a] or 0
       if a.min_count and a.min_count > count then
-        if count > 1 then
-          return c, nil, ("argument '%s' must appear at least %d times"):format(a.name, count)
+        if a.default ~= nil then
+          apply(a, nil, ctx, a.default)
+        else
+          if count > 1 then
+            return c, nil, ("argument '%s' must appear at least %d times"):format(a.name, count)
+          end
+          return c, nil, ("missing required argument '%s'"):format(a.name)
         end
-        return c, nil, ("missing required argument '%s'"):format(a.name)
       end
     end
 

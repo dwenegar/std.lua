@@ -23,13 +23,13 @@ local function create_app(action)
     version = '0.0.0.0',
     action = action,
     exit = noop,
-    flag.option {long = 'int', short = 'i', type = 'i', default = -1},
-    flag.option {long = 'str', short = 's', type = 's', default = ''},
-    flag.option {long = 'map', short = 'm', type = '{s=i}', default = ''},
-    flag.option {long = 'tuple', short = 't', type = 's=i', default = ''},
-    flag.option {long = 'tuple_list', short = 'T', type = '[s=i]', default = ''},
+    flag.option {long = 'int', short = 'i', type = 'i'},
+    flag.option {long = 'str', short = 's', type = 's'},
+    flag.option {long = 'map', short = 'm', type = '{s=i}'},
+    flag.option {long = 'tuple', short = 't', type = 's=i'},
+    flag.option {long = 'tuple_list', short = 'T', type = '[s=i]'},
     flag.option {long = 'flag', short = 'f', type = 'F'},
-    flag.option {long = 'list', short = 'l', type = '[i]', default = {}}
+    flag.option {long = 'list', short = 'l', type = '[i]'},
   }
 end
 
@@ -103,6 +103,23 @@ describe("#cli.options", function()
 
         invoked = false
         assert.is_nil(run_app(app, {"-i", "1", "-s", "str", "-ma=1", "-f", "-l", "1", "-l", "2", "-l", "3"}))
+        assert.is_true(invoked)
+      end)
+      it("should correctly set the default value", function()
+        local invoked
+        local app = cli.app {
+          name = 'app',
+          version = '0.0.0.0',
+          action = function(_, ctx)
+            assert.same(1, ctx.required)
+            invoked = true
+          end,
+          exit = noop,
+          flag.option {long = 'required', short = 'r', required = true, type = 'i', default = 1}
+        }
+
+        invoked = false
+        assert.is_nil(run_app(app))
         assert.is_true(invoked)
       end)
     end)

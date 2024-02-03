@@ -295,6 +295,7 @@ return M
 --- Represents the function used to validate the context before executing an @{action}.
 -- @function validate
 -- @tparam table ctx the program context (see @{AppContext}).
+-- @param value the value to validate.
 -- @treturn[opt] string `nil` if the context is valid; otherwise an error message.
 
 --- Represents the function containing the logic of a command or option.
