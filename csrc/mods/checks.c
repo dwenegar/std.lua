@@ -23,6 +23,8 @@
 
 static int checkers_ref = LUA_NOREF;
 
+#define ERR_INVALID_ARGUMENT_INDEX_MSG "invalid argument index"
+
 static const char *get_meta_field(lua_State *L, int arg, const char *field_name, size_t *len)
 {
     int field_type = luaL_getmetafield(L, arg, field_name);
@@ -233,7 +235,7 @@ static int checks_check_option(lua_State *L)
     lua_getstack(L, 1, &ar);
     if (!lua_getlocal(L, &ar, arg))
     {
-        return luaL_argerror(L, 1, "invalid argument index");
+        return luaL_argerror(L, 1, ERR_INVALID_ARGUMENT_INDEX_MSG);
     }
 
     // val
@@ -451,7 +453,7 @@ static int checks_check_type(lua_State *L)
     lua_getstack(L, 1, &ar);
     if (!lua_getlocal(L, &ar, arg))
     {
-        return luaL_argerror(L, 1, "invalid argument index");
+        return luaL_argerror(L, 1, ERR_INVALID_ARGUMENT_INDEX_MSG);
     }
 
     // val
@@ -599,7 +601,7 @@ static int checks_type_error(lua_State *L)
         lua_getstack(L, 1, &ar);
         if (!lua_getlocal(L, &ar, arg))
         {
-            return luaL_argerror(L, 1, "invalid argument index");
+            return luaL_argerror(L, 1, ERR_INVALID_ARGUMENT_INDEX_MSG);
         }
 
         int type = lua_type(L, arg);
@@ -614,7 +616,8 @@ static int checks_type_error(lua_State *L)
  *
  * @function check_arg
  * @tparam integer arg the position of the argument to be tested.
- * @tparam bool condition condition to check.
+ * @tparam boolean|function condition condition to check; the function will raise an error if
+ * condition evaluates to `false`; if condition is a `function` it will called with the value of the specifed argument.
  * @tparam[opt] string message additional text to use as comment.
  * @tparam[opt=1] integer level the level in the call stack at which to report the error.
  * @usage
@@ -626,14 +629,42 @@ static int checks_type_error(lua_State *L)
 static int checks_check_arg(lua_State *L)
 {
     int arg = (int)luaL_checkinteger(L, 1);
-    int cond = lua_toboolean(L, 2);
-    const char *extra_msg = luaL_optstring(L, 3, NULL);
-    int level = (int)luaL_optinteger(L, 4, 1);
-    if (level > 0 && !cond)
+    int cond_type = lua_type(L, 2);
+    luaL_argexpected(L, cond_type == LUA_TFUNCTION || cond_type == LUA_TBOOLEAN, 2, "function/boolean");
+
+    // 1: ok 0: not ok -1: internal error
+    int cond = -1;
+    if (cond_type == LUA_TFUNCTION)
     {
-        errorL_argerror(L, level, arg, extra_msg);
+        lua_Debug ar;
+        lua_getstack(L, 1, &ar);
+
+        lua_pushvalue(L, 2);             // condition
+        if (lua_getlocal(L, &ar, arg))   // condition val
+        {                                //
+            lua_call(L, 1, 1);           // result
+            cond = lua_toboolean(L, -1); //
+            lua_pop(L, 1);               // <empty stack>
+        }
+        else
+        {
+            lua_pop(L, 1);               // <empty stack>
+            return luaL_argerror(L, 1, ERR_INVALID_ARGUMENT_INDEX_MSG);
+        }
     }
-    return 0;
+    else
+    {
+        cond = lua_toboolean(L, 2);
+    }
+
+    if (cond == 1) return 0;
+
+    int level = (int)luaL_optinteger(L, 4, 1);
+    if (cond == 0)
+    {
+        const char *extra_msg = luaL_optstring(L, 3, NULL);
+        return errorL_argerror(L, level, arg, extra_msg);
+    }
 }
 
 /**
